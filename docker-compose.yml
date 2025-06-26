@@ -1,0 +1,8 @@
+services:
+  auth_service:
+    build:
+      context: .
+      dockerfile: auth_service/Dockerfile
+    ports:
+      - "8000:8000"
+    working_dir: /app
