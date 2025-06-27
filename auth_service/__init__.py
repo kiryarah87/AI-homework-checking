@@ -8,5 +8,5 @@ PACKAGE_DIR = Path(__file__).parent.resolve()
 settings = get_application_settings(file_path=PACKAGE_DIR / ".env")
 
 logger = get_project_logger(
-    name="auth_service", log_level=settings.DEVELOPMENT_LOG_LEVEL
+    name=__name__, log_level=settings.DEVELOPMENT_LOG_LEVEL
 )
