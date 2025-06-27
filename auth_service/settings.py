@@ -6,6 +6,34 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AppSettings(BaseSettings):
+    """
+    Класс конфигурации настроек приложения.
+
+    Этот класс определяет настройки для приложения, включая конфигурацию базы данных,
+    настройки пула соединений и параметры логирования. Он использует BaseSettings из Pydantic
+    для загрузки и валидации переменных окружения.
+
+    Атрибуты:
+        DBNAME (str): Имя базы данных
+        DBUSER (str): Пользователь базы данных
+        DBPASS (str): Пароль базы данных
+        DBHOST (str): Хост базы данных
+        DBPORT (int): Порт базы данных
+        DB_DRIVER (str): Драйвер базы данных (например, 'psycopg2', 'asyncpg')
+
+        DB_POOL_PRE_PING (bool): Включить ли предварительную проверку соединений в пуле
+        DB_POOL_RECYCLE (int): Время переиспользования соединений в секундах
+        DB_POOL_SIZE (int): Максимальное количество соединений в пуле
+        DB_POOL_OVERFLOW (int): Максимальное количество дополнительных соединений
+
+        DEVELOPMENT_LOG_LEVEL (int): Уровень логирования для среды разработки
+        LOG_RAW_SQL_QUERIES (bool): Логировать ли сырые SQL-запросы
+        PROD (bool): Флаг продакшн-среды
+
+    Свойства:
+        DATABASE_URI (str): Сформированный URI подключения к PostgreSQL
+    """
+
     DBNAME: str
     DBUSER: str
     DBPASS: str
