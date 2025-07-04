@@ -1,25 +1,23 @@
 from datetime import datetime
-from sqlalchemy import Integer, String, Enum, ForeignKey, Table, text, TIMESTAMP
+from sqlalchemy import Integer, String, Enum, ForeignKey, Table, text, TIMESTAMP, Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from . import Base
 from .enums import Role
 
-# Ассоциативная таблица для связи родитель-ребёнок
+
 parent_student = Table(
     "parent_student",
     Base.metadata,
-    mapped_column("parent_id", Integer, ForeignKey("users.id"), primary_key=True),
-    mapped_column("student_id", Integer, ForeignKey("users.id"), primary_key=True),
+    Column("parent_id", Integer, ForeignKey("users.id"), primary_key=True),
+    Column("student_id", Integer, ForeignKey("users.id"), primary_key=True),
 )
 
-
-# Ассоциативная таблица для связи учитель-ученик
 teacher_student = Table(
     "teacher_student",
     Base.metadata,
-    mapped_column("teacher_id", Integer, ForeignKey("users.id"), primary_key=True),
-    mapped_column("student_id", Integer, ForeignKey("users.id"), primary_key=True),
+    Column("teacher_id", Integer, ForeignKey("users.id"), primary_key=True),
+    Column("student_id", Integer, ForeignKey("users.id"), primary_key=True),
 )
 
 
@@ -31,11 +29,11 @@ class User(Base):
     email: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
     role: Mapped[Role] = mapped_column(Enum(Role), nullable=False)
-    created_at: Mapped[datetime.datetime] = mapped_column(
+    created_at: Mapped[TIMESTAMP] = mapped_column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
 
-    updated_at: Mapped[datetime.datetime] = mapped_column(
+    updated_at: Mapped[TIMESTAMP] = mapped_column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
     # Для родителей: список детей
