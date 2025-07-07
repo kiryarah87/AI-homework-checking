@@ -45,6 +45,8 @@
 
 ## Первоначальный запуск проекта
 
+### Вариант 1: Запуск без Docker
+
 Для установки и управления проектом используется `uv`.
 
 Можно установить в глобальное окружения с помощью `pip` (подробнее см. в [документации](https://docs.astral.sh/uv/getting-started/installation/))
@@ -53,7 +55,7 @@ pip install uv
 ```
 В проекте используется **python 3.12**
 
-### 1. Установить проект
+#### 1. Установить проект
 
 Выполнить команду из рабочей директории (в ней находится [pyproject.toml](pyproject.toml))
   ```shell
@@ -62,21 +64,47 @@ pip install uv
 
 Активировать виртуальное окружение `.venv` (с помощью IDE или командной строки).
 
-### 2. Конфигурация
+#### 2. Конфигурация
 
 Указать параметры запуска можно через переменные окружения или `.env` файл в корне
 проекта (см. [.env.example](.env.example)). Параметры указанные в переменных окружения имеют приоритет выше, чем
 параметры в файле.
 
-### 3. Запустить приложение
+#### 3. Запустить приложение
 
-  ```shell
-  uvicorn auth_service.app.main:app
-  ```
-  или используя Docker (Для этого он должен быть установлен в вашей ОС)
+```shell
+# Запуск с параметрами по умолчанию
+uvicorn homework_checking.app.main:app
 
-  ```shell
-  docker compose up
-  ```
+# Запуск с указанием хоста и порта
+uvicorn homework_checking.app.main:app --host 0.0.0.0 --port 8000
 
-После запуска на `0.0.0.0` swagger документацию можно посмотреть по пути `/docs`.
+# Запуск в режиме разработки с автоматической перезагрузкой
+uvicorn homework_checking.app.main:app --reload
+```
+
+### Вариант 2: Запуск с использованием Docker
+
+#### 1. Установить Docker
+
+Для запуска приложения с использованием Docker необходимо установить Docker и Docker Compose на вашем компьютере.
+
+- **Linux**: [Инструкции по установке Docker на Linux](https://docs.docker.com/engine/install/)
+- **Windows**: [Инструкции по установке Docker Desktop для Windows](https://docs.docker.com/desktop/install/windows-install/)
+- **macOS**: [Инструкции по установке Docker Desktop для Mac](https://docs.docker.com/desktop/install/mac-install/)
+
+#### 2. Запустить приложение
+
+```shell
+# Сборка и запуск контейнеров
+docker compose up
+
+# Запуск в фоновом режиме
+docker compose up -d
+
+# Остановка контейнеров
+docker compose down
+```
+
+После запуска API будет доступен по адресу `http://localhost:8000`,
+а Swagger-документацию можно найти по пути `/docs`.
