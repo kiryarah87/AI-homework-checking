@@ -34,7 +34,10 @@ class User(Base):
     )
 
     updated_at: Mapped[TIMESTAMP] = mapped_column(
-        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=text("now()"),
+        server_onupdate=text("now()"),
     )
     # Для родителей: список детей
     children: Mapped[list["User"]] = relationship(
