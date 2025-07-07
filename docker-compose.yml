@@ -6,3 +6,39 @@ services:
     ports:
       - "8000:8000"
     working_dir: /app
+    depends_on:
+      - postgres
+    environment:
+      - DBNAME=auth_db
+      - DBUSER=postgres
+      - DBPASS=postgres
+      - DBHOST=postgres
+      - DBPORT=5432
+      - DB_DRIVER=psycopg
+      - DB_POOL_SIZE=100
+      - DB_POOL_OVERFLOW=25
+      - DB_POOL_RECYCLE=300
+      - DB_POOL_PRE_PING=True
+      - LOG_RAW_SQL_QUERIES=True
+      - DEVELOPMENT_LOG_LEVEL=10
+      - PROD=1
+      - PYTHONPATH=/app
+
+  postgres:
+    image: postgres:16-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=auth_db
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
