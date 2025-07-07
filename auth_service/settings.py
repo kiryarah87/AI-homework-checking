@@ -1,6 +1,6 @@
 from pathlib import Path
-
 from dotenv import load_dotenv
+
 from pydantic import PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -29,9 +29,11 @@ class AppSettings(BaseSettings):
         DEVELOPMENT_LOG_LEVEL (int): Уровень логирования для среды разработки
         LOG_RAW_SQL_QUERIES (bool): Логировать ли сырые SQL-запросы
         PROD (bool): Флаг продакшн-среды
+        PYTHONPATH (str): Путь к корневой директории проекта для корректной работы Alembic
 
     Свойства:
         DATABASE_URI (str): Сформированный URI подключения к PostgreSQL
+        DATABASE_ALEMBIC_URL (str): Сформированный URL для Alembic миграций
     """
 
     DBNAME: str
@@ -49,6 +51,7 @@ class AppSettings(BaseSettings):
     DEVELOPMENT_LOG_LEVEL: int
     LOG_RAW_SQL_QUERIES: bool
     PROD: bool
+    PYTHONPATH: str | Path
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -65,6 +68,13 @@ class AppSettings(BaseSettings):
             host=self.DBHOST,
             port=str(self.DBPORT),
             path=f"/{self.DBNAME}",
+        )
+
+    @property
+    def DATABASE_ALEMBIC_URL(self) -> str:
+        return (
+            f"postgresql+{self.DB_DRIVER}://{self.DBUSER}:{self.DBPASS}"
+            f"@{self.DBHOST}:{self.DBPORT}/{self.DBNAME}"
         )
 
 
